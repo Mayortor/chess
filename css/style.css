@@ -1,0 +1,21 @@
+:root {
+  --off-white: rgb(230, 230, 230);
+  --off-black: rgb(30, 30, 30);
+  --square-size: 70px;
+}
+
+.white-square {
+  background-color: var(--off-white);
+  width: var(--square-size);
+  height: var(--square-size);
+  margin: 0px;
+  padding: 0px;
+}
+
+.black-square {
+  background-color: var(--off-black);
+  width: var(--square-size);
+  height: var(--square-size);
+  margin: 0px;
+  padding: 0px;
+}
