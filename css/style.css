@@ -10,12 +10,24 @@
   height: var(--square-size);
   margin: 0px;
   padding: 0px;
+  overflow: hidden;
 }
 
 .black-square {
   background-color: var(--off-black);
   width: var(--square-size);
   height: var(--square-size);
+  overflow: hidden;
   margin: 0px;
   padding: 0px;
+}
+
+.chess-square {
+  text-align: center;
+}
+
+.chess-piece {
+  padding: 5px;
+  height: 60px;
+  width: auto;
 }
