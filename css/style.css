@@ -1,6 +1,7 @@
 :root {
   --off-white: rgb(230, 230, 230);
   --off-black: rgb(30, 30, 30);
+  --selected-color: rgb(39, 113, 186);
   --square-size: 70px;
 }
 
@@ -22,6 +23,21 @@
   padding: 0px;
 }
 
+.selected-square {
+  background-color: var(--selected-color);
+}
+
+.selected-square > img {
+  -webkit-filter: drop-shadow(1px 1px 0 white)
+                drop-shadow(-1px 1px 0 white)
+                drop-shadow(1px -1px 0 white)
+                drop-shadow(-1px -1px 0 white);
+filter: drop-shadow(1px 1px 0 white)
+        drop-shadow(-1px 1px 0 white)
+        drop-shadow(1px -1px 0 white)
+        drop-shadow(-1px -1px 0 white);
+}
+
 .chess-square {
   text-align: center;
 }
@@ -30,4 +46,9 @@
   padding: 5px;
   height: 60px;
   width: auto;
+}
+
+.chess-board-label {
+  font-family: Arial;
+  padding: 10px;
 }
