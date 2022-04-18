@@ -2,6 +2,7 @@
   --off-white: rgb(230, 230, 230);
   --off-black: rgb(30, 30, 30);
   --selected-color: rgb(39, 113, 186);
+  --valid-color: rgb(53, 126, 26);
   --square-size: 70px;
 }
 
@@ -25,6 +26,10 @@
 
 .selected-square {
   background-color: var(--selected-color);
+}
+
+.valid-move-square {
+  background-color: var(--valid-color);
 }
 
 .selected-square > img {

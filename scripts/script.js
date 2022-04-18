@@ -70,7 +70,6 @@ function createBoard() {
     // Appending row to table
     table.appendChild(row);
   }
-
   resetBoard();
 }
 
@@ -78,8 +77,6 @@ function createBoard() {
 function resetBoard() {
   // Reseting board
   initializePieces();
-
-
 }
 
 function initializePieces() {
@@ -89,8 +86,32 @@ function initializePieces() {
 
   for (const key in piecesCount) {
     for (let i = 0; i < piecesCount[key]; i++) {
-      wPieces.push(new Piece('w', key));
-      bPieces.push(new Piece('b', key));
+      switch (key) {
+        case 'pawn':
+          wPieces.push(new Pawn('w'));
+          bPieces.push(new Pawn('b'));
+          break;
+        case 'rook':
+          wPieces.push(new Rook('w'));
+          bPieces.push(new Rook('b'));
+          break;
+        case 'knight':
+          wPieces.push(new Knight('w'));
+          bPieces.push(new Knight('b'));
+          break;
+        case 'bishop':
+          wPieces.push(new Bishop('w'));
+          bPieces.push(new Bishop('b'));
+          break;
+        case 'queen':
+          wPieces.push(new Queen('w'));
+          bPieces.push(new Queen('b'));
+          break;
+        case 'king':
+          wPieces.push(new King('w'));
+          bPieces.push(new King('b'));
+          break;
+      }
     }
   }
 
@@ -155,11 +176,53 @@ function drawPieces() {
 }
 
 let prevSquare;
+let prevValidMoves;
 function selectSquare(e) {
+  let currentPos = { x: parseInt(e.id[3]), y: parseInt(e.id[5])};
   e.classList.add('selected-square');
 
   if (prevSquare) {
     prevSquare.classList.remove('selected-square');
   }
   prevSquare = e;
+
+  let validMoves = [];
+  for (let i = 0; i < wPieces.length; i++) {
+    let piece = wPieces[i];
+    if (piece.isPosEqual(currentPos)) {
+      validMoves = piece.validMoves();
+    }
+  }
+
+  for (let i = 0; i < validMoves.length; i++) {
+    validMoves[i].classList.add('valid-move-square');
+  }
+
+  if (prevValidMoves) {
+    for (let i = 0; i < prevValidMoves.length; i++) {
+      prevValidMoves[i].classList.remove('valid-move-square');
+    }
+  }
+  prevValidMoves = validMoves;
+}
+
+function freePos(pos) {
+  if (pos.x > boardSize - 1 || pos.x < 0 || pos.y > boardSize - 1 || pos.y < 0) {
+    return false;
+  }
+  for (let i = 0; i < wPieces.length; i++) {
+    if (wPieces[i].isPosEqual(pos)) {
+      return false;
+    }
+  }
+  for (let i = 0; i < bPieces.length; i++) {
+    if (bPieces[i].isPosEqual(pos)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function posToSqaure(pos) {
+  return document.getElementById(`pos${pos.x}-${pos.y}`);
 }
