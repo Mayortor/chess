@@ -210,8 +210,8 @@ function getPosState(pos, color) {
   if (pos.x > boardSize - 1 || pos.x < 0 || pos.y > boardSize - 1 || pos.y < 0) {
     return State.OUT;
   }
-  let square = board[pos.y][pos.x]
-  return square !== State.EMPTY ? square.color === color ? State.FRIENDLY : State.ENEMY : State.EMPTY;
+  let square = board[pos.y][pos.x];
+  return square !== State.EMPTY ? square.color == color ? State.FRIENDLY : State.ENEMY : State.EMPTY;
 }
 
 function posToSqaure(pos) {

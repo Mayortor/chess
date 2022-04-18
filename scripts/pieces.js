@@ -29,11 +29,15 @@ class Pawn extends Piece {
       let checkPos = this.color === TeamColor.WHITE ? { x: this.pos.x, y: this.pos.y - i - 1 } : { x: this.pos.x, y: this.pos.y + i + 1 };
       if (getPosState(checkPos, this.color) === State.EMPTY) {
         possibleMoves.push(posToSqaure(checkPos));
+      } else if (getPosState(checkPos, this.color) === State.ENEMY) {
+        possibleMoves.push(posToSqaure(checkPos));
+        break;
       } else {
         return possibleMoves;
       }
     }
 
+    this.isFirstMove = false;
     return possibleMoves;
   }
 }
@@ -54,8 +58,11 @@ class Rook extends Piece {
 
       for (let j = 0; j < boardSize - 1; j++) {
         checkPos = addPos(checkPos, offset);
-        if (getPosState(checkPos) === State.EMPTY) {
+        if (getPosState(checkPos, this.color) === State.EMPTY) {
           possibleMoves.push(posToSqaure(checkPos));
+        } else if (getPosState(checkPos, this.color) === State.ENEMY) {
+          possibleMoves.push(posToSqaure(checkPos));
+          break;
         } else {
           break;
         }
@@ -81,12 +88,13 @@ class Knight extends Piece {
       for (let j = 0; j < offsets.length; j++) {
         let checkPos = {...this.pos};
         checkPos = addPos(checkPos, offsets[j]);
-        if (getPosState(checkPos) === State.EMPTY) {
+        if (getPosState(checkPos, this.color) === State.EMPTY) {
+          possibleMoves.push(posToSqaure(checkPos));
+        } else if (getPosState(checkPos, this.color) === State.ENEMY) {
           possibleMoves.push(posToSqaure(checkPos));
         }
       }
     }
-
     return possibleMoves;
   }
 }
@@ -108,8 +116,11 @@ class Bishop extends Piece {
 
       for (let j = 0; j < boardSize - 1; j++) {
         checkPos = addPos(checkPos, offset);
-        if (getPosState(checkPos) === State.EMPTY) {
+        if (getPosState(checkPos, this.color) === State.EMPTY) {
           possibleMoves.push(posToSqaure(checkPos));
+        } else if (getPosState(checkPos, this.color) === State.ENEMY) {
+          possibleMoves.push(posToSqaure(checkPos));
+          break;
         } else {
           break;
         }
@@ -138,8 +149,11 @@ class Queen extends Piece {
 
         for (let j = 0; j < boardSize - 1; j++) {
           checkPos = addPos(checkPos, offsets[k]);
-          if (getPosState(checkPos) === State.EMPTY) {
+          if (getPosState(checkPos, this.color) === State.EMPTY) {
             possibleMoves.push(posToSqaure(checkPos));
+          } else if (getPosState(checkPos, this.color) === State.ENEMY) {
+            possibleMoves.push(posToSqaure(checkPos));
+            break;
           } else {
             break;
           }
@@ -166,7 +180,9 @@ class King extends Piece {
       for (let j = 0; j < offsets.length; j++) {
         let checkPos = {...this.pos};
         checkPos = addPos(checkPos, offsets[j]);
-        if (getPosState(checkPos) === State.EMPTY) {
+        if (getPosState(checkPos, this.color) === State.EMPTY) {
+          possibleMoves.push(posToSqaure(checkPos));
+        } else if (getPosState(checkPos, this.color) === State.ENEMY) {
           possibleMoves.push(posToSqaure(checkPos));
         }
       }
