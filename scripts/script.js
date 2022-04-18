@@ -12,6 +12,7 @@ const piecesCount = {
 }
 let wPieces = [];
 let bPieces = [];
+
 // Setting 'load' event
 window.addEventListener('load', createBoard);
 
@@ -73,7 +74,6 @@ function createBoard() {
   resetBoard();
 }
 
-
 function resetBoard() {
   // Reseting board
   initializePieces();
@@ -121,58 +121,63 @@ function initializePieces() {
 
 function setPiecesPositions() {
   // Setting the pieces in their origin postion
-  wPieces[0].pos = { x: 0, y: 6 }
-  wPieces[1].pos = { x: 1, y: 6 }
-  wPieces[2].pos = { x: 2, y: 6 }
-  wPieces[3].pos = { x: 3, y: 6 }
-  wPieces[4].pos = { x: 4, y: 6 }
-  wPieces[5].pos = { x: 5, y: 6 }
-  wPieces[6].pos = { x: 6, y: 6 }
-  wPieces[7].pos = { x: 7, y: 6 }
-  wPieces[8].pos = { x: 0, y: 7 }
-  wPieces[9].pos = { x: 7, y: 7 }
-  wPieces[10].pos = { x: 1, y: 7 }
-  wPieces[11].pos = { x: 6, y: 7 }
-  wPieces[12].pos = { x: 2, y: 7 }
-  wPieces[13].pos = { x: 5, y: 7 }
-  wPieces[14].pos = { x: 3, y: 7 }
-  wPieces[15].pos = { x: 4, y: 7 }
+  wPieces[0].pos = { x: 0, y: 6 };
+  wPieces[1].pos = { x: 1, y: 6 };
+  wPieces[2].pos = { x: 2, y: 6 };
+  wPieces[3].pos = { x: 3, y: 6 };
+  wPieces[4].pos = { x: 4, y: 6 };
+  wPieces[5].pos = { x: 5, y: 6 };
+  wPieces[6].pos = { x: 6, y: 6 };
+  wPieces[7].pos = { x: 7, y: 6 };
+  wPieces[8].pos = { x: 0, y: 7 };
+  wPieces[9].pos = { x: 7, y: 7 };
+  wPieces[10].pos = { x: 1, y: 7 };
+  wPieces[11].pos = { x: 6, y: 7 };
+  wPieces[12].pos = { x: 2, y: 7 };
+  wPieces[13].pos = { x: 5, y: 7 };
+  wPieces[14].pos = { x: 3, y: 7 };
+  wPieces[15].pos = { x: 4, y: 7 };
 
-  bPieces[0].pos = { x: 0, y: 1 }
-  bPieces[1].pos = { x: 1, y: 1 }
-  bPieces[2].pos = { x: 2, y: 1 }
-  bPieces[3].pos = { x: 3, y: 1 }
-  bPieces[4].pos = { x: 4, y: 1 }
-  bPieces[5].pos = { x: 5, y: 1 }
-  bPieces[6].pos = { x: 6, y: 1 }
-  bPieces[7].pos = { x: 7, y: 1 }
-  bPieces[8].pos = { x: 0, y: 0 }
-  bPieces[9].pos = { x: 7, y: 0 }
-  bPieces[10].pos = { x: 1, y: 0 }
-  bPieces[11].pos = { x: 6, y: 0 }
-  bPieces[12].pos = { x: 2, y: 0 }
-  bPieces[13].pos = { x: 5, y: 0 }
-  bPieces[14].pos = { x: 3, y: 0 }
-  bPieces[15].pos = { x: 4, y: 0 }
+  bPieces[0].pos = { x: 0, y: 1 };
+  bPieces[1].pos = { x: 1, y: 1 };
+  bPieces[2].pos = { x: 2, y: 1 };
+  bPieces[3].pos = { x: 3, y: 1 };
+  bPieces[4].pos = { x: 4, y: 1 };
+  bPieces[5].pos = { x: 5, y: 1 };
+  bPieces[6].pos = { x: 6, y: 1 };
+  bPieces[7].pos = { x: 7, y: 1 };
+  bPieces[8].pos = { x: 0, y: 0 };
+  bPieces[9].pos = { x: 7, y: 0 };
+  bPieces[10].pos = { x: 1, y: 0 };
+  bPieces[11].pos = { x: 6, y: 0 };
+  bPieces[12].pos = { x: 2, y: 0 };
+  bPieces[13].pos = { x: 5, y: 0 };
+  bPieces[14].pos = { x: 3, y: 0 };
+  bPieces[15].pos = { x: 4, y: 0 };
+
 }
 
 function drawPieces() {
   // Drawing all pieces on the board
   for (let i = 0; i < wPieces.length; i++) {
-    let piece = wPieces[i];
-    let imgPath = `./img/${piece.color}-${piece.type}.png`;
-    let pieceImgElement = document.getElementById(`pos${piece.pos.x}-${piece.pos.y}`).getElementsByTagName('img')[0];
-    pieceImgElement.src = imgPath;
-    pieceImgElement.alt = '';
+    drawPiece(wPieces[i]);
   }
 
   for (let i = 0; i < bPieces.length; i++) {
-    let piece = bPieces[i];
-    let imgPath = `./img/${piece.color}-${piece.type}.png`;
-    let pieceImgElement = document.getElementById(`pos${piece.pos.x}-${piece.pos.y}`).getElementsByTagName('img')[0];
-    pieceImgElement.src = imgPath;
-    pieceImgElement.alt = '';
+    drawPiece(bPieces[i]);
   }
+}
+
+function drawPiece(piece) {
+  let imgPath = `./img/${piece.color}-${piece.type}.png`;
+  let pieceImgElement = posToSqaure(piece.pos).getElementsByTagName('img')[0];
+  pieceImgElement.src = imgPath;
+  pieceImgElement.alt = '';
+}
+
+function clearSquare(pos) {
+  let pieceImgElement = posToSqaure(pos).getElementsByTagName('img')[0];
+  pieceImgElement.src = '';
 }
 
 let prevSquare;
@@ -194,6 +199,13 @@ function selectSquare(e) {
     }
   }
 
+  for (let i = 0; i < bPieces.length; i++) {
+    let piece = bPieces[i];
+    if (piece.isPosEqual(currentPos)) {
+      validMoves = piece.validMoves();
+    }
+  }
+
   for (let i = 0; i < validMoves.length; i++) {
     validMoves[i].classList.add('valid-move-square');
   }
@@ -206,21 +218,21 @@ function selectSquare(e) {
   prevValidMoves = validMoves;
 }
 
-function freePos(pos) {
+function getPosState(pos, color) {
   if (pos.x > boardSize - 1 || pos.x < 0 || pos.y > boardSize - 1 || pos.y < 0) {
-    return false;
+    return 'OUT-OF-BOUNDS';
   }
   for (let i = 0; i < wPieces.length; i++) {
     if (wPieces[i].isPosEqual(pos)) {
-      return false;
+      return color === 'w' ? 'friendly' : 'enemy';
     }
   }
   for (let i = 0; i < bPieces.length; i++) {
     if (bPieces[i].isPosEqual(pos)) {
-      return false;
+      return color === 'b' ? 'friendly' : 'enemy';
     }
   }
-  return true;
+  return 'free';
 }
 
 function posToSqaure(pos) {

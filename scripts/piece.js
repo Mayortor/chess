@@ -8,6 +8,12 @@ class Piece {
   isPosEqual(pos) {
     return this.pos.x === pos.x && this.pos.y === pos.y;
   }
+
+  moveTo(pos) {
+    clearSquare(this.pos);
+    this.pos = pos;
+    drawPiece(this);
+  }
 }
 
 class Pawn extends Piece {
@@ -19,14 +25,29 @@ class Pawn extends Piece {
   validMoves() {
     let possibleMoves = [];
     const steps = this.isFirstMove ? 2 : 1;
-    if (this.color = 'w') {
+
+    if (this.color === 'w') {
       for (let i = 0; i < steps; i++) {
         let checkPos = { x: this.pos.x, y: this.pos.y - i - 1 };
-        if (freePos(checkPos)) {
+        if (getPosState(checkPos, this.color) === 'free') {
           possibleMoves.push(posToSqaure(checkPos));
+        } else {
+          return possibleMoves;
         }
       }
     }
+
+    if (this.color === 'b') {
+      for (let i = 0; i < steps; i++) {
+        let checkPos = { x: this.pos.x, y: this.pos.y + i + 1 };
+        if (getPosState(checkPos, this.color) === 'free') {
+          possibleMoves.push(posToSqaure(checkPos));
+        } else {
+          return possibleMoves;
+        }
+      }
+    }
+
     return possibleMoves;
   }
 }
