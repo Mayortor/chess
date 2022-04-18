@@ -171,6 +171,8 @@ function clearSquare(pos) {
 let prevSquare;
 let prevValidMoves;
 function selectSquare(e) {
+  let currentPos = squareToPos(e);
+  let isValidMove = false;
   if (prevSquare) {
     prevSquare.classList.remove('selected-square');
   }
@@ -178,23 +180,30 @@ function selectSquare(e) {
   if (prevValidMoves) {
     for (let i = 0; i < prevValidMoves.length; i++) {
       prevValidMoves[i].classList.remove('valid-move-square');
+      isValidMove = (isPosEqual(squareToPos(prevValidMoves[i]), currentPos)) || isValidMove;
     }
   }
 
-  let currentPos = { x: parseInt(e.id[3]), y: parseInt(e.id[5])};
-  e.classList.add('selected-square');
+  if (isValidMove) {
+    let piecePos = squareToPos(prevSquare);
+    board[piecePos.y][piecePos.x].moveTo(currentPos);
+    prevSquare = undefined;
+    prevValidMoves = undefined;
+  } else {
+    e.classList.add('selected-square');
 
-  prevSquare = e;
+    prevSquare = e;
 
-  let piece = board[currentPos.y][currentPos.x];
-  let validMoves;
-  piece ? validMoves = piece.validMoves() : validMoves = [];
+    let piece = board[currentPos.y][currentPos.x];
+    let validMoves;
+    piece ? validMoves = piece.validMoves() : validMoves = [];
 
-  for (let i = 0; i < validMoves.length; i++) {
-    validMoves[i].classList.add('valid-move-square');
+    for (let i = 0; i < validMoves.length; i++) {
+      validMoves[i].classList.add('valid-move-square');
+    }
+
+    prevValidMoves = validMoves;
   }
-
-  prevValidMoves = validMoves;
 }
 
 function getPosState(pos, color) {
@@ -209,8 +218,16 @@ function posToSqaure(pos) {
   return document.getElementById(`pos${pos.x}-${pos.y}`);
 }
 
+function squareToPos(square) {
+  return { x: parseInt(square.id[3]), y: parseInt(square.id[5])};
+}
+
 function mirrorPosVertically(pos) {
   return { x: pos.x, y: (boardSize - 1) - pos.y};
+}
+
+function isPosEqual(pos1, pos2) {
+  return pos1.x === pos2.x && pos1.y === pos2.y;
 }
 
 function addPos(pos1, pos2) {

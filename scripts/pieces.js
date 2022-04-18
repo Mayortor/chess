@@ -5,9 +5,7 @@ class Piece {
     this.pos = pos;
   }
 
-  isPosEqual(pos) {
-    return this.pos.x === pos.x && this.pos.y === pos.y;
-  }
+
 
   moveTo(pos) {
     clearSquare(this.pos);
