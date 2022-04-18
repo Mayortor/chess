@@ -17,8 +17,9 @@ class Piece {
 }
 
 class Pawn extends Piece {
+  static TYPE = 'pawn';
   constructor(color, pos = { x: 0, y: 0 }) {
-    super(color, 'pawn', pos);
+    super(color, Pawn.TYPE, pos);
     this.isFirstMove = true;
   }
 
@@ -75,8 +76,9 @@ class Pawn extends Piece {
 }
 
 class Rook extends Piece {
+  static TYPE = 'rook';
   constructor(color, pos = { x: 0, y: 0 }) {
-    super(color, 'rook', pos);
+    super(color, Rook.TYPE, pos);
     this.isFirstMove = true;
   }
 
@@ -107,8 +109,9 @@ class Rook extends Piece {
 }
 
 class Knight extends Piece {
+  static TYPE = 'knight';
   constructor(color, pos = { x: 0, y: 0 }) {
-    super(color, 'knight', pos);
+    super(color, Knight.TYPE, pos);
   }
 
   validMoves() {
@@ -132,8 +135,9 @@ class Knight extends Piece {
 }
 
 class Bishop extends Piece {
+  static TYPE = 'bishop';
   constructor(color, pos = { x: 0, y: 0 }) {
-    super(color, 'bishop', pos);
+    super(color, Bishop.TYPE, pos);
   }
 
   validMoves() {
@@ -163,8 +167,9 @@ class Bishop extends Piece {
 }
 
 class Queen extends Piece {
+  static TYPE = 'queen';
   constructor(color, pos = { x: 0, y: 0 }) {
-    super(color, 'queen', pos);
+    super(color, Queen.TYPE, pos);
   }
 
   validMoves() {
@@ -179,7 +184,6 @@ class Queen extends Piece {
 
         for (let j = 0; j < boardSize - 1; j++) {
           checkPos = addPos(checkPos, offsets[k]);
-          console.log(checkPos);
           if (getPosState(checkPos, this.color) === State.EMPTY) {
             possibleMoves.push(posToSqaure(checkPos));
           } else if (getPosState(checkPos, this.color) === State.ENEMY) {
@@ -196,6 +200,7 @@ class Queen extends Piece {
 }
 
 class King extends Piece {
+  static TYPE = 'king';
   constructor(color, pos = { x: 0, y: 0 }) {
     super(color, 'king', pos);
   }
@@ -217,6 +222,37 @@ class King extends Piece {
       }
     }
 
+    if (this.isFirstMove) {
+      let maybeRooks = [board[this.pos.y][0], board[this.pos.y][boardSize - 1]];
+      for (let i = 0; i < maybeRooks.length; i++) {
+        if (maybeRooks[i]) {
+          if (maybeRooks[i].type === Rook.TYPE && maybeRooks[i].isFirstMove) {
+            let clear = true;
+            for (let j = Math.min(maybeRooks[i].pos.x, this.pos.x) + 1; j < Math.max(maybeRooks[i].pos.x, this.pos.x); j++) {
+              (getPosState({ x: j, y: this.pos.y }) !== State.EMPTY) ? clear = false : '';
+            }
+            let xOffset = maybeRooks[i].pos.x === 0 ? -2 : 2;
+            clear ? possibleMoves.push(posToSqaure({ x: this.pos.x + xOffset, y: this.pos.y })) : '';
+          }
+        }
+      }
+    }
     return possibleMoves;
+  }
+
+  moveTo(pos) {
+    this.isFirstMove = false;
+    if (Math.abs(this.pos.x - pos.x) === 2) {
+      if (pos.x === 6) {
+        board[pos.y][boardSize - 1].moveTo({ x: pos.x - 1, y: pos.y });
+      } else {
+        board[pos.y][0].moveTo({ x: pos.x + 1, y: pos.y });
+      }
+    }
+    clearSquare(this.pos);
+    captureSquare(pos);
+    this.pos = pos;
+    drawPiece(this);
+    board[pos.y][pos.x] = this;
   }
 }
