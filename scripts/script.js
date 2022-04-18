@@ -43,6 +43,8 @@ let wPieces = [];
 let bPieces = [];
 let board;
 
+let enPassant;
+
 // Setting 'load' event
 window.addEventListener('load', createBoard);
 
@@ -168,6 +170,14 @@ function clearSquare(pos) {
   pieceImgElement.src = '';
 }
 
+function captureSquare(pos) {
+  let piece = board[pos.y][pos.x];
+  if (piece) {
+    piece.color === TeamColor.WHITE ? wPieces.splice(wPieces.indexOf(piece), 1) : bPieces.splice(bPieces.indexOf(piece), 1);
+  }
+  board[pos.y][pos.x] = State.EMPTY;
+}
+
 let prevSquare;
 let prevValidMoves;
 function selectSquare(e) {
@@ -231,23 +241,25 @@ function isPosEqual(pos1, pos2) {
 }
 
 function addPos(pos1, pos2) {
+  let pos = {...pos1};
   if (pos2.x) {
-    pos1.x += pos2.x;
+    pos.x += pos2.x;
   }
   if (pos2.y) {
-    pos1.y += pos2.y;
+    pos.y += pos2.y;
   }
-  return pos1;
+  return pos;
 }
 
 function subPos(pos1, pos2) {
+  let pos = {...pos1};
   if (pos2.x) {
-    pos1.x -= pos2.x;
+    pos.x -= pos2.x;
   }
   if (pos2.y) {
-    pos1.y -= pos2.y;
+    pos.y -= pos2.y;
   }
-  return pos1;
+  return pos;
 }
 
 function multPos(pos, factor) {

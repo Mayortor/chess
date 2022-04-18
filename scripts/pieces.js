@@ -3,12 +3,13 @@ class Piece {
     this.color = color;
     this.type = type;
     this.pos = pos;
+    this.isFirstMove = true;
   }
 
-
-
   moveTo(pos) {
+    this.isFirstMove = false;
     clearSquare(this.pos);
+    captureSquare(pos);
     this.pos = pos;
     drawPiece(this);
     board[pos.y][pos.x] = this;
@@ -29,22 +30,54 @@ class Pawn extends Piece {
       let checkPos = this.color === TeamColor.WHITE ? { x: this.pos.x, y: this.pos.y - i - 1 } : { x: this.pos.x, y: this.pos.y + i + 1 };
       if (getPosState(checkPos, this.color) === State.EMPTY) {
         possibleMoves.push(posToSqaure(checkPos));
-      } else if (getPosState(checkPos, this.color) === State.ENEMY) {
-        possibleMoves.push(posToSqaure(checkPos));
-        break;
       } else {
-        return possibleMoves;
+        break;
       }
     }
 
-    this.isFirstMove = false;
+    if (enPassant) {
+      if (this.pos.y === enPassant.pos.y) {
+        let checkPoses = [];
+        if (this.pos.x + 1 === enPassant.pos.x || this.pos.x - 1 === enPassant.pos.x) {
+          checkPoses = [{ x: enPassant.pos.x, y: this.pos.y + 1 }, { x: enPassant.pos.x, y: this.pos.y - 1 }];
+        }
+        for (let i = 0; i < checkPoses.length; i++) {
+          if (getPosState(checkPoses[i], this.color) === State.EMPTY) {
+            possibleMoves.push(posToSqaure(checkPoses[i]));
+          }
+        }
+      }
+    }
+
     return possibleMoves;
+  }
+
+  moveTo(pos) {
+    this.isFirstMove = false;
+    if (Math.abs(pos.y - this.pos.y) === 2) enPassant = this;
+    if (enPassant && pos.x !== this.pos.x) {
+      if (pos.y < this.pos.y) {
+        captureSquare({ x: pos.x, y: pos.y + 1});
+        clearSquare({ x: pos.x, y: pos.y + 1});
+        enPassant = undefined;
+      } else if (pos.y > this.pos.y) {
+        captureSquare({ x: pos.x, y: pos.y - 1})
+        clearSquare({ x: pos.x, y: pos.y - 1});
+        enPassant = undefined;
+      }
+    }
+    clearSquare(this.pos);
+    captureSquare(pos);
+    this.pos = pos;
+    drawPiece(this);
+    board[pos.y][pos.x] = this;
   }
 }
 
 class Rook extends Piece {
   constructor(color, pos = { x: 0, y: 0 }) {
     super(color, 'rook', pos);
+    this.isFirstMove = true;
   }
 
   validMoves() {
@@ -76,7 +109,6 @@ class Rook extends Piece {
 class Knight extends Piece {
   constructor(color, pos = { x: 0, y: 0 }) {
     super(color, 'knight', pos);
-    this.isFirstMove = true;
   }
 
   validMoves() {
@@ -102,7 +134,6 @@ class Knight extends Piece {
 class Bishop extends Piece {
   constructor(color, pos = { x: 0, y: 0 }) {
     super(color, 'bishop', pos);
-    this.isFirstMove = true;
   }
 
   validMoves() {
@@ -134,7 +165,6 @@ class Bishop extends Piece {
 class Queen extends Piece {
   constructor(color, pos = { x: 0, y: 0 }) {
     super(color, 'queen', pos);
-    this.isFirstMove = true;
   }
 
   validMoves() {
@@ -149,6 +179,7 @@ class Queen extends Piece {
 
         for (let j = 0; j < boardSize - 1; j++) {
           checkPos = addPos(checkPos, offsets[k]);
+          console.log(checkPos);
           if (getPosState(checkPos, this.color) === State.EMPTY) {
             possibleMoves.push(posToSqaure(checkPos));
           } else if (getPosState(checkPos, this.color) === State.ENEMY) {
@@ -160,7 +191,6 @@ class Queen extends Piece {
         }
       }
     }
-
     return possibleMoves;
   }
 }
@@ -168,7 +198,6 @@ class Queen extends Piece {
 class King extends Piece {
   constructor(color, pos = { x: 0, y: 0 }) {
     super(color, 'king', pos);
-    this.isFirstMove = true;
   }
 
   validMoves() {
