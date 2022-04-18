@@ -13,6 +13,7 @@ class Piece {
     clearSquare(this.pos);
     this.pos = pos;
     drawPiece(this);
+    board[pos.y][pos.x] = this;
   }
 }
 
@@ -26,25 +27,12 @@ class Pawn extends Piece {
     let possibleMoves = [];
     const steps = this.isFirstMove ? 2 : 1;
 
-    if (this.color === 'w') {
-      for (let i = 0; i < steps; i++) {
-        let checkPos = { x: this.pos.x, y: this.pos.y - i - 1 };
-        if (getPosState(checkPos, this.color) === 'free') {
-          possibleMoves.push(posToSqaure(checkPos));
-        } else {
-          return possibleMoves;
-        }
-      }
-    }
-
-    if (this.color === 'b') {
-      for (let i = 0; i < steps; i++) {
-        let checkPos = { x: this.pos.x, y: this.pos.y + i + 1 };
-        if (getPosState(checkPos, this.color) === 'free') {
-          possibleMoves.push(posToSqaure(checkPos));
-        } else {
-          return possibleMoves;
-        }
+    for (let i = 0; i < steps; i++) {
+      let checkPos = this.color === TeamColor.WHITE ? { x: this.pos.x, y: this.pos.y - i - 1 } : { x: this.pos.x, y: this.pos.y + i + 1 };
+      if (getPosState(checkPos, this.color) === State.EMPTY) {
+        possibleMoves.push(posToSqaure(checkPos));
+      } else {
+        return possibleMoves;
       }
     }
 
@@ -55,11 +43,28 @@ class Pawn extends Piece {
 class Rook extends Piece {
   constructor(color, pos = { x: 0, y: 0 }) {
     super(color, 'rook', pos);
-    this.isFirstMove = true;
   }
 
   validMoves() {
-    return [];
+    let possibleMoves = [];
+    const steps = boardSize - 1;
+    let offset = { x: 1, y: 0 }
+
+    for (let i = 0; i < 4; i++) {
+      let checkPos = {...this.pos};
+      offset = rotatePos(offset, 90);
+
+      for (let j = 0; j < boardSize - 1; j++) {
+        checkPos = addPos(checkPos, offset);
+        if (getPosState(checkPos) === State.EMPTY) {
+          possibleMoves.push(posToSqaure(checkPos));
+        } else {
+          break;
+        }
+      }
+    }
+
+    return possibleMoves;
   }
 }
 
@@ -70,7 +75,21 @@ class Knight extends Piece {
   }
 
   validMoves() {
-    return [];
+    let possibleMoves = [];
+    let offsets = [{ x: 1, y: 2 }, { x: 2, y: 1 }];
+
+    for (let i = 0; i < 4; i++) {
+      offsets = offsets.map(pos => rotatePos(pos, 90));
+      for (let j = 0; j < offsets.length; j++) {
+        let checkPos = {...this.pos};
+        checkPos = addPos(checkPos, offsets[j]);
+        if (getPosState(checkPos) === State.EMPTY) {
+          possibleMoves.push(posToSqaure(checkPos));
+        }
+      }
+    }
+
+    return possibleMoves;
   }
 }
 
@@ -81,7 +100,25 @@ class Bishop extends Piece {
   }
 
   validMoves() {
-    return [];
+    let possibleMoves = [];
+    const steps = boardSize - 1;
+    let offset = { x: 1, y: 1 }
+
+    for (let i = 0; i < 4; i++) {
+      let checkPos = {...this.pos};
+      offset = rotatePos(offset, 90);
+
+      for (let j = 0; j < boardSize - 1; j++) {
+        checkPos = addPos(checkPos, offset);
+        if (getPosState(checkPos) === State.EMPTY) {
+          possibleMoves.push(posToSqaure(checkPos));
+        } else {
+          break;
+        }
+      }
+    }
+
+    return possibleMoves;
   }
 }
 
@@ -92,7 +129,27 @@ class Queen extends Piece {
   }
 
   validMoves() {
-    return [];
+    let possibleMoves = [];
+    const steps = boardSize - 1;
+    let offsets = [{ x: 1, y: 0 }, { x: 1, y: 1 }];
+
+    for (let k = 0; k < offsets.length; k++) {
+      for (let i = 0; i < 4; i++) {
+        let checkPos = {...this.pos};
+        offsets[k] = rotatePos(offsets[k], 90);
+
+        for (let j = 0; j < boardSize - 1; j++) {
+          checkPos = addPos(checkPos, offsets[k]);
+          if (getPosState(checkPos) === State.EMPTY) {
+            possibleMoves.push(posToSqaure(checkPos));
+          } else {
+            break;
+          }
+        }
+      }
+    }
+
+    return possibleMoves;
   }
 }
 
@@ -103,6 +160,20 @@ class King extends Piece {
   }
 
   validMoves() {
-    return [];
+    let possibleMoves = [];
+    let offsets = [{ x: 1, y: 0 }, { x: 1, y: 1 }];
+
+    for (let i = 0; i < 4; i++) {
+      offsets = offsets.map(pos => rotatePos(pos, 90));
+      for (let j = 0; j < offsets.length; j++) {
+        let checkPos = {...this.pos};
+        checkPos = addPos(checkPos, offsets[j]);
+        if (getPosState(checkPos) === State.EMPTY) {
+          possibleMoves.push(posToSqaure(checkPos));
+        }
+      }
+    }
+
+    return possibleMoves;
   }
 }
