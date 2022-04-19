@@ -54,7 +54,7 @@ function createBoard() {
   // Defining table element
   let table = document.createElement('table');
   // Appending table to body element
-  document.body.appendChild(table);
+  document.getElementsByClassName('chess-div')[0].appendChild(table);
 
   let r = document.createElement('tr');
   table.appendChild(r);
@@ -238,6 +238,13 @@ function promotionChoosen() {
     popupWindow.style.visibility = 'hidden';
     popupArgs = undefined;
   }
+}
+
+function changeTurn() {
+  let indicator = document.getElementById('turn-indicator');
+  turn === TeamColor.WHITE ? indicator.classList.add('turn-indicator-b') : indicator.classList.remove('turn-indicator-b');
+  turn === TeamColor.WHITE ? indicator.innerHTML = 'Black Turn' : indicator.innerHTML = 'White Turn';
+  turn = turn === TeamColor.WHITE ? TeamColor.BLACK : TeamColor.WHITE;
 }
 
 function getPosState(pos, color) {

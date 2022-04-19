@@ -4,6 +4,7 @@
   --selected-color: rgb(39, 113, 186);
   --valid-color: rgb(53, 126, 26);
   --square-size: 70px;
+  font-family: Arial;
 }
 
 .white-square {
@@ -13,6 +14,57 @@
   margin: 0px;
   padding: 0px;
   overflow: hidden;
+}
+
+.chess-outer-container {
+  display: flex;
+  justify-content: center;
+}
+
+.chess-inner-container {
+  text-align: center;
+}
+
+.chess-div {
+}
+
+.chess-div h1 {
+  margin: 0;
+  padding: 0;
+}
+
+.turn-indicator-w {
+  margin: 30px auto;
+  width: 300px;
+  height: 100px;
+  outline: 1px solid rgb(255, 255, 255);
+  box-shadow: 0px 0px 5px 5px var(--off-black) inset;
+  background-color: var(--off-white);
+  border: 1px solid var(--off-black);
+
+  display: flex;
+  color: var(--off-black);
+  font-weight: bold;
+  font-size: 30px;
+  align-items: center;
+  justify-content: center;
+}
+
+.turn-indicator-b {
+  margin: 30px auto;
+  width: 300px;
+  height: 100px;
+  outline: 1px solid rgb(255, 255, 255);
+  box-shadow: 0px 0px 5px 5px var(--off-white) inset;
+  background-color: var(--off-black);
+  border: 1px solid var(--off-black);
+
+  display: flex;
+  color: var(--off-white);
+  font-weight: bold;
+  font-size: 30px;
+  align-items: center;
+  justify-content: center;
 }
 
 .black-square {
@@ -54,7 +106,6 @@ filter: drop-shadow(1px 1px 0 white)
 }
 
 .chess-board-label {
-  font-family: Arial;
   padding: 10px;
 }
 
@@ -86,7 +137,7 @@ filter: drop-shadow(1px 1px 0 white)
   text-align: center;
 }
 
-h1 {
+.promotion-popup-header h1 {
   font-family: Arial;
   padding: 12px;
 }

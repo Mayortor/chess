@@ -7,7 +7,7 @@ class Piece {
   }
 
   moveTo(pos) {
-    turn = turn === TeamColor.WHITE ? TeamColor.BLACK : TeamColor.WHITE;
+    changeTurn();
     enPassant = undefined;
     this.isFirstMove = false;
     clearSquare(this.pos);
@@ -56,7 +56,7 @@ class Pawn extends Piece {
   }
 
   moveTo(pos) {
-    turn = turn === TeamColor.WHITE ? TeamColor.BLACK : TeamColor.WHITE;
+    changeTurn();
     this.isFirstMove = false;
     if (enPassant && pos.x !== this.pos.x) {
       if (pos.y < this.pos.y) {
@@ -247,7 +247,7 @@ class King extends Piece {
   }
 
   moveTo(pos) {
-    turn = turn === TeamColor.WHITE ? TeamColor.BLACK : TeamColor.WHITE;
+    changeTurn();
     enPassant = undefined;
     this.isFirstMove = false;
     if (Math.abs(this.pos.x - pos.x) === 2) {
