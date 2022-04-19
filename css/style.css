@@ -57,3 +57,146 @@ filter: drop-shadow(1px 1px 0 white)
   font-family: Arial;
   padding: 10px;
 }
+
+.promotion-popup-overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  visibility: hidden;
+}
+
+.promotion-popup-container {
+  margin: 120px auto;
+  padding: 20px;
+  width: 700px;
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+
+.promotion-popup-header {
+  margin: 0 auto;
+  height: 200px;
+  width: 400px;
+  background-color: rgb(50, 140, 210);
+  border-radius: 10px;
+  text-align: center;
+}
+
+h1 {
+  font-family: Arial;
+  padding: 12px;
+}
+
+.promotion-popup-body-w {
+  position: absolute;
+  top: 100px;
+  height: 200px;
+  width: 700px;
+  background-color: var(--off-white);
+  border-radius: 15px;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.selection {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+}
+
+.promotion-popup-body-b {
+  position: absolute;
+  top: 100px;
+  height: 200px;
+  width: 700px;
+  background-color: var(--off-white);
+  border-radius: 15px;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.promotion-popup-body-w [type=radio] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.promotion-popup-body-w [type=radio] + img {
+  border-radius: 5px;
+}
+
+.promotion-popup-body-w [type=radio]:hover + img {
+  outline: 1px solid rgb(255, 255, 255);
+  box-shadow: 0px 0px 5px 5px rgb(210, 235, 255) inset;
+}
+
+.promotion-popup-body-w [type=radio]:checked + img {
+  outline: 1px solid rgb(255, 255, 255);
+  box-shadow: 0px 0px 5px 5px rgb(210, 235, 255) inset;
+  background-color: rgb(240, 240, 240);
+}
+
+.promotion-popup-body-w img {
+  width: 100px;
+  padding: 10px;
+}
+
+.promotion-popup-body-b [type=radio] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.promotion-popup-body-b [type=radio] + img {
+  border-radius: 5px;
+}
+
+.promotion-popup-body-b [type=radio]:hover + img {
+  outline: 1px solid rgb(50, 50, 50);
+  box-shadow: 0px 0px 5px 5px white inset;
+}
+
+.promotion-popup-body-b [type=radio]:checked + img {
+  outline: 1px solid rgb(50, 50, 50);
+  box-shadow: 0px 0px 5px 5px white inset;
+  background-color: rgb(200, 200, 200);
+}
+
+.promotion-popup-body-b img {
+  width: 100px;
+  padding: 10px;
+}
+
+.submit-button {
+  width: 150px;
+  height: 30px;
+
+  background-color: rgb(70, 150, 40);
+  border: 0;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+}
+
+.submit-button:hover {
+  border: 1px solid white;
+  box-shadow: 0px 0px 5px 5px rgb(130, 190, 110) inset;
+}

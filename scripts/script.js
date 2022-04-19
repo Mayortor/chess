@@ -13,22 +13,22 @@ const TeamColor = {
   BLACK: 'b'
 }
 const piecesPosition = [
-  {type: 'pawn', pos: { x: 0, y: 1 }},
-  {type: 'pawn', pos: { x: 1, y: 1 }},
-  {type: 'pawn', pos: { x: 2, y: 1 }},
-  {type: 'pawn', pos: { x: 3, y: 1 }},
-  {type: 'pawn', pos: { x: 4, y: 1 }},
-  {type: 'pawn', pos: { x: 5, y: 1 }},
-  {type: 'pawn', pos: { x: 6, y: 1 }},
-  {type: 'pawn', pos: { x: 7, y: 1 }},
-  {type: 'rook', pos: { x: 0, y: 0 }},
-  {type: 'knight', pos: { x: 1, y: 0 }},
-  {type: 'bishop', pos: { x: 2, y: 0 }},
-  {type: 'queen', pos: { x: 3, y: 0 }},
-  {type: 'king', pos: { x: 4, y: 0 }},
-  {type: 'bishop', pos: { x: 5, y: 0 }},
-  {type: 'knight', pos: { x: 6, y: 0 }},
-  {type: 'rook', pos: { x: 7, y: 0 }}
+  {type: Pawn.TYPE, pos: { x: 0, y: 1 }},
+  {type: Pawn.TYPE, pos: { x: 1, y: 1 }},
+  {type: Pawn.TYPE, pos: { x: 2, y: 1 }},
+  {type: Pawn.TYPE, pos: { x: 3, y: 1 }},
+  {type: Pawn.TYPE, pos: { x: 4, y: 1 }},
+  {type: Pawn.TYPE, pos: { x: 5, y: 1 }},
+  {type: Pawn.TYPE, pos: { x: 6, y: 1 }},
+  {type: Pawn.TYPE, pos: { x: 7, y: 1 }},
+  {type: Rook.TYPE, pos: { x: 0, y: 0 }},
+  {type: Knight.TYPE, pos: { x: 1, y: 0 }},
+  {type: Bishop.TYPE, pos: { x: 2, y: 0 }},
+  {type: Queen.TYPE, pos: { x: 3, y: 0 }},
+  {type: King.TYPE, pos: { x: 4, y: 0 }},
+  {type: Bishop.TYPE, pos: { x: 5, y: 0 }},
+  {type: Knight.TYPE, pos: { x: 6, y: 0 }},
+  {type: Rook.TYPE, pos: { x: 7, y: 0 }}
 ]
 
 const piecesCount = {
@@ -44,6 +44,8 @@ let bPieces = [];
 let board;
 
 let enPassant;
+let popupArgs;
+let turn = TeamColor.WHITE;
 
 // Setting 'load' event
 window.addEventListener('load', createBoard);
@@ -131,30 +133,31 @@ function initializePieces() {
 }
 
 function createPiece(type, color, pos) {
-  let piece
+  let piece;
   switch (type) {
-    case 'pawn':
+    case Pawn.TYPE:
       piece = new Pawn(color, pos);
       break;
-    case 'rook':
+    case Rook.TYPE:
       piece = new Rook(color, pos);
       break;
-    case 'knight':
+    case Knight.TYPE:
       piece = new Knight(color, pos);
       break;
-    case 'bishop':
+    case Bishop.TYPE:
       piece = new Bishop(color, pos);
       break;
-    case 'queen':
+    case Queen.TYPE:
       piece = new Queen(color, pos);
       break;
-    case 'king':
+    case King.TYPE:
       piece = new King(color, pos);
       break;
   }
   board[pos.y][pos.x] = piece;
   (color === TeamColor.WHITE) ? wPieces.push(piece) : bPieces.push(piece);
   drawPiece(piece)
+  return piece;
 }
 
 function drawPiece(piece) {
@@ -201,18 +204,39 @@ function selectSquare(e) {
     prevValidMoves = undefined;
   } else {
     e.classList.add('selected-square');
-
     prevSquare = e;
 
     let piece = board[currentPos.y][currentPos.x];
     let validMoves;
-    piece ? validMoves = piece.validMoves() : validMoves = [];
+
+    piece && piece.color === turn ? validMoves = piece.validMoves() : validMoves = [];
 
     for (let i = 0; i < validMoves.length; i++) {
       validMoves[i].classList.add('valid-move-square');
     }
 
     prevValidMoves = validMoves;
+  }
+}
+
+function promotion(pos, color) {
+  console.log('test');
+  let popupWindow = document.getElementById((color === TeamColor.WHITE) ? 'w-popup' : 'b-popup' );
+  popupArgs = {
+    color: color,
+    pos: pos
+  };
+  popupWindow.style.visibility = 'visible';
+}
+
+function promotionChoosen() {
+  let type = $('input[name="promotion"]:checked');
+  if (type) {
+    captureSquare(popupArgs.pos);
+    let newPiece = createPiece(type.val(), popupArgs.color, popupArgs.pos);
+    let popupWindow = document.getElementById((popupArgs.color === TeamColor.WHITE) ? 'w-popup' : 'b-popup' );
+    popupWindow.style.visibility = 'hidden';
+    popupArgs = undefined;
   }
 }
 

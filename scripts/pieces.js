@@ -7,6 +7,8 @@ class Piece {
   }
 
   moveTo(pos) {
+    turn = turn === TeamColor.WHITE ? TeamColor.BLACK : TeamColor.WHITE;
+    enPassant = undefined;
     this.isFirstMove = false;
     clearSquare(this.pos);
     captureSquare(pos);
@@ -54,24 +56,28 @@ class Pawn extends Piece {
   }
 
   moveTo(pos) {
+    turn = turn === TeamColor.WHITE ? TeamColor.BLACK : TeamColor.WHITE;
     this.isFirstMove = false;
-    if (Math.abs(pos.y - this.pos.y) === 2) enPassant = this;
     if (enPassant && pos.x !== this.pos.x) {
       if (pos.y < this.pos.y) {
         captureSquare({ x: pos.x, y: pos.y + 1});
         clearSquare({ x: pos.x, y: pos.y + 1});
-        enPassant = undefined;
       } else if (pos.y > this.pos.y) {
         captureSquare({ x: pos.x, y: pos.y - 1})
         clearSquare({ x: pos.x, y: pos.y - 1});
-        enPassant = undefined;
       }
     }
+    enPassant = undefined;
+    if (Math.abs(pos.y - this.pos.y) === 2) enPassant = this;
     clearSquare(this.pos);
     captureSquare(pos);
     this.pos = pos;
     drawPiece(this);
     board[pos.y][pos.x] = this;
+
+    if (pos.y === 0 && this.color === TeamColor.WHITE || pos.y === boardSize - 1 && this.color === TeamColor.BLACK) {
+      promotion(pos, this.color);
+    }
   }
 }
 
@@ -241,6 +247,8 @@ class King extends Piece {
   }
 
   moveTo(pos) {
+    turn = turn === TeamColor.WHITE ? TeamColor.BLACK : TeamColor.WHITE;
+    enPassant = undefined;
     this.isFirstMove = false;
     if (Math.abs(this.pos.x - pos.x) === 2) {
       if (pos.x === 6) {

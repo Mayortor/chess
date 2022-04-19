@@ -6,7 +6,64 @@
     <link rel="stylesheet" href="/css/style.css">
     <script type="text/javascript" src="./scripts/pieces.js"></script>
     <script type="text/javascript" src="./scripts/script.js"></script>
+    <script type="text/javascript" src="./scripts/jquery-3.6.0.min.js"></script>
   </head>
   <body>
+    <div class="promotion-popup-overlay" id="w-popup">
+      <div class="promotion-popup-container">
+        <div class="promotion-popup-header">
+          <h1>Choose your Promotion</h1>
+        </div>
+        <div class="promotion-popup-body-w">
+          <div class="selection">
+            <label>
+              <input class="promotion-selection" type="radio" name="promotion" value="queen">
+              <img src="./img/w-queen.png">
+            </label>
+            <label>
+              <input class="promotion-selection" type="radio" name="promotion" value="rook">
+              <img src="./img/w-rook.png">
+            </label>
+            <label>
+              <input class="promotion-selection" type="radio" name="promotion" value="bishop">
+              <img src="./img/w-bishop.png">
+            </label>
+            <label>
+              <input class="promotion-selection" type="radio" name="promotion" value="knight">
+              <img src="./img/w-knight.png">
+            </label>
+          </div>
+          <button class="submit-button" type="button" name="promotion" onclick="promotionChoosen()">Done</button>
+        </div>
+      </div>
+    </div>
+    <div class="promotion-popup-overlay" id="b-popup">
+      <div class="promotion-popup-container">
+        <div class="promotion-popup-header">
+          <h1>Choose your Promotion</h1>
+        </div>
+        <div class="promotion-popup-body-b">
+          <div class="selection">
+            <label>
+              <input class="promotion-selection" type="radio" name="promotion" value="queen">
+              <img src="./img/b-queen.png">
+            </label>
+            <label>
+              <input class="promotion-selection" type="radio" name="promotion" value="rook">
+              <img src="./img/b-rook.png">
+            </label>
+            <label>
+              <input class="promotion-selection" type="radio" name="promotion" value="bishop">
+              <img src="./img/b-bishop.png">
+            </label>
+            <label>
+              <input class="promotion-selection" type="radio" name="promotion" value="knight">
+              <img src="./img/b-knight.png">
+            </label>
+          </div>
+          <button class="submit-button" type="button" name="promotion" onclick="promotionChoosen()">Done</button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
