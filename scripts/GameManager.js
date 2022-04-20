@@ -6,9 +6,13 @@ class GameManager {
     this.prevValidMoves;
     this.popupArgs;
     this.enPassant;
+    this.gameEnded = false;
   }
 
   selectSquare(e) {
+    if (this.gameEnded) {
+      return;
+    }
     let currentPos = squareToPos(e);
     let isValidMove = false;
     if (this.prevSquare) {
@@ -36,30 +40,34 @@ class GameManager {
 
       piece && piece.color === this.turn ? validMoves = piece.validMoves() : validMoves = [];
 
-      for (let i = 0; i < validMoves.length; i++) {
-        let validMove = validMoves[i];
-        let wPiecesCopy = [...boardData.wPieces];
-        let bPiecesCopy = [...boardData.bPieces];
-        let enPassantCopy = this.enPassant;
-        let prevPos = {...piece.pos};
-        let validMovePos = squareToPos(validMove);
-        piece.moveTo(validMovePos, true);
-        if (gameManager._checkForCheck(flipColor(piece.color), false)) {
-          validMoves.splice(validMoves.indexOf(validMove), 1);
-          i--;
-        }
-        console.log()
-        piece.moveTo(prevPos, true);
-        boardData.rollBack(wPiecesCopy, bPiecesCopy)
-
-        this.enPassant = enPassantCopy;
-      }
+      this.removeCheckedSquares(validMoves, piece);
 
       for (let i = 0; i < validMoves.length; i++) {
         validMoves[i].classList.add('valid-move-square');
       }
 
       this.prevValidMoves = validMoves;
+      return validMoves;
+    }
+  }
+
+  removeCheckedSquares(validMoves, piece) {
+    for (let i = 0; i < validMoves.length; i++) {
+      let validMove = validMoves[i];
+      let wPiecesCopy = [...boardData.wPieces];
+      let bPiecesCopy = [...boardData.bPieces];
+      let enPassantCopy = this.enPassant;
+      let prevPos = {...piece.pos};
+      let validMovePos = squareToPos(validMove);
+      piece.moveTo(validMovePos, true);
+      if (gameManager._checkForCheck(flipColor(piece.color), false)) {
+        validMoves.splice(validMoves.indexOf(validMove), 1);
+        i--;
+      }
+      piece.moveTo(prevPos, true);
+      boardData.rollBack(wPiecesCopy, bPiecesCopy);
+
+      this.enPassant = enPassantCopy;
     }
   }
 
@@ -112,13 +120,33 @@ class GameManager {
       }
     }
 
-    isCheck && toNotify ? this.notifyCheck(color === TeamColor.WHITE ? 'black' : 'white') : '';
+    let isCheckmate;
+    if (isCheck && toNotify) {
+      isCheckmate = this.checkForCheckmate(color, possibleMoves);
+    }
+
+    isCheck && toNotify && !isCheckmate ? this.notifyCheck(color === TeamColor.WHITE ? 'black' : 'white') : '';
+    isCheckmate && toNotify ? this.notifyCheckmate(color === TeamColor.WHITE ? 'White' : 'Black') : '';
     return isCheck;
+  }
+
+  checkForCheckmate(color, wPossibleMoves) {
+    let bPieces = color === TeamColor.WHITE ? boardData.bPieces : boardData.wPieces;
+
+    let noCheckMove = [];
+    for (let bPiece of bPieces) {
+      let validMoves = bPiece.validMoves();
+      this.removeCheckedSquares(validMoves, bPiece);
+      noCheckMove = noCheckMove.concat(validMoves);
+    }
+
+    return noCheckMove.length === 0;
   }
 
   notifyCheck(color) {
     let notification = `The ${color} king is in check.`;
     let overlay = document.getElementsByClassName('popup-notification-overlay')[0];
+    overlay.getElementsByTagName('h1')[0].innerHTML = "Check!";
     overlay.getElementsByTagName('h2')[0].innerHTML = notification;
     overlay.style.visibility = 'visible';
     overlay.style.opacity = '1';
@@ -128,5 +156,15 @@ class GameManager {
         overlay.style.visibility = 'hidden';
       }, 1000);
     }, 2000);
+  }
+
+  notifyCheckmate(color) {
+    this.gameEnded = true;
+    let notification = `${color} wins!`;
+    let overlay = document.getElementsByClassName('popup-notification-overlay')[0];
+    overlay.getElementsByTagName('h1')[0].innerHTML = "Checkmate!";
+    overlay.getElementsByTagName('h2')[0].innerHTML = notification;
+    overlay.style.visibility = 'visible';
+    overlay.style.opacity = '1';
   }
 }

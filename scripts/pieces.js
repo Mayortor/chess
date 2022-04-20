@@ -15,7 +15,6 @@ class Piece {
     boardData.captureSquare(pos);
     this.pos = pos;
     boardData.board[pos.y][pos.x] = this;
-    console.log(this);
     boardData.drawPiece(this);
     if (!isVirtual) {
       this.isFirstMove = false;
@@ -83,8 +82,10 @@ class Pawn extends Piece {
     super.moveTo(pos, isVirtual);
     if (Math.abs(pos.y - prevPos.y) === 2) gameManager.enPassant = this;
 
-    if (pos.y === 0 && this.color === TeamColor.WHITE || pos.y === boardData.boardSize - 1 && this.color === TeamColor.BLACK) {
-      gameManager.promotion(pos, this.color);
+    if (!isVirtual) {
+      if (pos.y === 0 && this.color === TeamColor.WHITE || pos.y === boardData.boardSize - 1 && this.color === TeamColor.BLACK) {
+        gameManager.promotion(pos, this.color);
+      }
     }
   }
 }
