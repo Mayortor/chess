@@ -6,9 +6,20 @@
     <link rel="stylesheet" href="/css/style.css">
     <script type="text/javascript" src="./scripts/pieces.js"></script>
     <script type="text/javascript" src="./scripts/script.js"></script>
+    <script type="text/javascript" src="./scripts/BoardData.js"></script>
+    <script type="text/javascript" src="./scripts/GameManager.js"></script>
+    <script type="text/javascript" src="./scripts/utilities.js"></script>
     <script type="text/javascript" src="./scripts/jquery-3.6.0.min.js"></script>
   </head>
   <body>
+    <div class="popup-notification-overlay">
+      <h1 class="">
+        Check!
+      </h1>
+      <h2 class="">
+        The black king is in check.
+      </h2>
+    </div>
     <div class="promotion-popup-overlay" id="w-popup">
       <div class="promotion-popup-container">
         <div class="promotion-popup-header">
@@ -33,7 +44,7 @@
               <img src="./img/w-knight.png">
             </label>
           </div>
-          <button class="submit-button" type="button" name="promotion" onclick="promotionChoosen()">Done</button>
+          <button class="submit-button" type="button" name="promotion" onclick="gameManager.promotionChoosen()">Done</button>
         </div>
       </div>
     </div>
@@ -61,7 +72,7 @@
               <img src="./img/b-knight.png">
             </label>
           </div>
-          <button class="submit-button" type="button" name="promotion" onclick="promotionChoosen()">Done</button>
+          <button class="submit-button" type="button" name="promotion" onclick="gameManager.promotionChoosen()">Done</button>
         </div>
       </div>
     </div>

@@ -1,10 +1,12 @@
+@import url('https://fonts.googleapis.com/css?family=Comfortaa&display=swap');
+
 :root {
   --off-white: rgb(230, 230, 230);
   --off-black: rgb(30, 30, 30);
   --selected-color: rgb(39, 113, 186);
   --valid-color: rgb(53, 126, 26);
   --square-size: 70px;
-  font-family: Arial;
+  font-family: 'Comfortaa-Bold';
 }
 
 .white-square {
@@ -107,6 +109,34 @@ filter: drop-shadow(1px 1px 0 white)
 
 .chess-board-label {
   padding: 10px;
+}
+
+.popup-notification-overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(230, 230, 230, 0.7);
+  transition: opacity 1s;
+  opacity: 0;
+  visibility: hidden;
+  padding-bottom: 11%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.popup-notification-overlay > h1 {
+  font-size: 60px;
+  margin: 0;
+
+}
+.popup-notification-overlay > h2 {
+  font-size: 30px;
+
 }
 
 .promotion-popup-overlay {
