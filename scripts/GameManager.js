@@ -24,7 +24,7 @@ class GameManager {
 
     if (isValidMove) {
       let piecePos = squareToPos(this.prevSquare);
-      boardData.board[piecePos.y][piecePos.x].moveTo(currentPos);
+      boardData.board[piecePos.y][piecePos.x].moveTo(currentPos, false);
       this.prevSquare = undefined;
       this.prevValidMoves = undefined;
     } else {
@@ -35,6 +35,24 @@ class GameManager {
       let validMoves;
 
       piece && piece.color === this.turn ? validMoves = piece.validMoves() : validMoves = [];
+
+      for (let i = 0; i < validMoves.length; i++) {
+        let validMove = validMoves[i];
+        let wPiecesCopy = [...boardData.wPieces];
+        let bPiecesCopy = [...boardData.bPieces];
+        let enPassantCopy = this.enPassant;
+        let prevPos = {...piece.pos};
+        let validMovePos = squareToPos(validMove);
+        piece.moveTo(validMovePos, true);
+        if (gameManager._checkForCheck(flipColor(piece.color), false)) {
+          validMoves.splice(validMoves.indexOf(validMove), 1);
+          i--;
+        }
+        piece.moveTo(prevPos, true);
+        boardData.rollBack(wPiecesCopy, bPiecesCopy)
+
+        this.enPassant = enPassantCopy;
+      }
 
       for (let i = 0; i < validMoves.length; i++) {
         validMoves[i].classList.add('valid-move-square');
@@ -72,31 +90,32 @@ class GameManager {
   }
 
   checkForChecks() {
-    this._checkForCheck(TeamColor.WHITE);
-    this._checkForCheck(TeamColor.BLACK);
+    this._checkForCheck(TeamColor.WHITE, true);
+    this._checkForCheck(TeamColor.BLACK, true);
   }
 
-  _checkForCheck(color) {
+  _checkForCheck(color, toNotify) {
     let possibleMoves = [];
     let pieces = color === TeamColor.WHITE ? boardData.wPieces : boardData.bPieces;
     for (let piece of pieces) {
       possibleMoves = possibleMoves.concat(piece.validMoves());
     }
     possibleMoves = [...new Set(possibleMoves)];
-    let king = color === TeamColor.WHITE ? getKing(TeamColor.BLACK) : getKing(TeamColor.WHITE);
+    let king = getKing(flipColor(color));
 
     let isCheck = false;
-    let isCheckmate = false;
 
     for (let possibleMove of possibleMoves) {
       if (isPosEqual(squareToPos(possibleMove),king.pos)) {
         isCheck = true;
-        isCheckmate = true;
       }
     }
 
-    isCheck ? this.notifyCheck(color === TeamColor.WHITE ? 'black' : 'white') : '';
+    isCheck && toNotify ? this.notifyCheck(color === TeamColor.WHITE ? 'black' : 'white') : '';
+    return isCheck;
   }
+
+  checkForCheckmate(kingPosMoves, possibleMoves) {
 
   notifyCheck(color) {
     let notification = `The ${color} king is in check.`;

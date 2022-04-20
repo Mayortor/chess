@@ -57,3 +57,7 @@ function getKing(color) {
     }
   }
 }
+
+function flipColor(color) {
+  return color === TeamColor.WHITE ? TeamColor.BLACK : TeamColor.WHITE;
+}

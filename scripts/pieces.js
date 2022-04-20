@@ -6,16 +6,20 @@ class Piece {
     this.isFirstMove = true;
   }
 
-  moveTo(pos) {
-    gameManager.changeTurn();
-    gameManager.enPassant = undefined;
+  moveTo(pos, isVirtual) {
+    if (!isVirtual) {
+      gameManager.changeTurn();
+      gameManager.enPassant = undefined;
+    }
     boardData.clearSquare(this.pos);
     boardData.captureSquare(pos);
     this.pos = pos;
     boardData.board[pos.y][pos.x] = this;
     boardData.drawPiece(this);
-    this.isFirstMove = false;
-    gameManager.checkForChecks();
+    if (!isVirtual) {
+      this.isFirstMove = false;
+      gameManager.checkForChecks();
+    }
   }
 }
 
@@ -64,7 +68,7 @@ class Pawn extends Piece {
     return possibleMoves;
   }
 
-  moveTo(pos) {
+  moveTo(pos, isVirtual) {
     if (gameManager.enPassant && pos.x !== this.pos.x) {
       if (pos.y < this.pos.y) {
         boardData.captureSquare({ x: pos.x, y: pos.y + 1});
@@ -74,8 +78,8 @@ class Pawn extends Piece {
         boardData.clearSquare({ x: pos.x, y: pos.y - 1});
       }
     }
-    let prevPos = {...this.pos}
-    super.moveTo(pos);
+    let prevPos = {...this.pos};
+    super.moveTo(pos, isVirtual);
     if (Math.abs(pos.y - prevPos.y) === 2) gameManager.enPassant = this;
 
     if (pos.y === 0 && this.color === TeamColor.WHITE || pos.y === boardData.boardSize - 1 && this.color === TeamColor.BLACK) {
@@ -249,16 +253,16 @@ class King extends Piece {
     return possibleMoves;
   }
 
-  moveTo(pos) {
+  moveTo(pos, isVirtual) {
     if (Math.abs(this.pos.x - pos.x) === 2) {
       if (pos.x === 6) {
-        boardData.board[pos.y][boardData.boardSize - 1].moveTo({ x: pos.x - 1, y: pos.y });
+        boardData.board[pos.y][boardData.boardSize - 1].moveTo({ x: pos.x - 1, y: pos.y }, isVirtual);
         gameManager.changeTurn();
       } else {
-        boardData.board[pos.y][0].moveTo({ x: pos.x + 1, y: pos.y });
+        boardData.board[pos.y][0].moveTo({ x: pos.x + 1, y: pos.y }, isVirtual);
         gameManager.changeTurn();
       }
     }
-    super.moveTo(pos);
+    super.moveTo(pos, isVirtual);
   }
 }

@@ -153,4 +153,24 @@ class BoardData {
     let square = boardData.board[pos.y][pos.x];
     return square !== SquareState.EMPTY ? square.color == color ? SquareState.FRIENDLY : SquareState.ENEMY : SquareState.EMPTY;
   }
+
+  rollBack(wPieces, bPieces) {
+    this.wPieces = [...wPieces];
+    this.bPieces = [...bPieces];
+    for (let i = 0; i < this.boardSize; i++) {
+      this.board[i] = new Array();
+      for (let j = 0; j < this.boardSize; j++) {
+        this.board[i][j] = SquareState.EMPTY;
+      }
+    }
+
+    for (let piece of wPieces) {
+      this.board[piece.pos.y][piece.pos.x] = piece;
+      this.drawPiece(piece);
+    }
+    for (let piece of bPieces) {
+      this.board[piece.pos.y][piece.pos.x] = piece;
+      this.drawPiece(piece);
+    }
+  }
 }
