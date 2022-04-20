@@ -15,6 +15,7 @@ class Piece {
     boardData.captureSquare(pos);
     this.pos = pos;
     boardData.board[pos.y][pos.x] = this;
+    console.log(this);
     boardData.drawPiece(this);
     if (!isVirtual) {
       this.isFirstMove = false;
@@ -255,13 +256,20 @@ class King extends Piece {
 
   moveTo(pos, isVirtual) {
     if (Math.abs(this.pos.x - pos.x) === 2) {
+      if (isVirtual) {
+        if (this.pos.x === 6) {
+          boardData.board[pos.y][5].moveTo({ x: boardData.boardSize - 1, y: pos.y }, isVirtual);
+        } else if (this.pos.x === 2) {
+          boardData.board[pos.y][3].moveTo({ x: 0, y: pos.y }, isVirtual);
+        }
+      }
+
       if (pos.x === 6) {
         boardData.board[pos.y][boardData.boardSize - 1].moveTo({ x: pos.x - 1, y: pos.y }, isVirtual);
-        gameManager.changeTurn();
-      } else {
+      } else if (pos.x === 2) {
         boardData.board[pos.y][0].moveTo({ x: pos.x + 1, y: pos.y }, isVirtual);
-        gameManager.changeTurn();
       }
+      gameManager.changeTurn();
     }
     super.moveTo(pos, isVirtual);
   }

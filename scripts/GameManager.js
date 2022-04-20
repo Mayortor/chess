@@ -48,6 +48,7 @@ class GameManager {
           validMoves.splice(validMoves.indexOf(validMove), 1);
           i--;
         }
+        console.log()
         piece.moveTo(prevPos, true);
         boardData.rollBack(wPiecesCopy, bPiecesCopy)
 
@@ -114,8 +115,6 @@ class GameManager {
     isCheck && toNotify ? this.notifyCheck(color === TeamColor.WHITE ? 'black' : 'white') : '';
     return isCheck;
   }
-
-  checkForCheckmate(kingPosMoves, possibleMoves) {
 
   notifyCheck(color) {
     let notification = `The ${color} king is in check.`;
