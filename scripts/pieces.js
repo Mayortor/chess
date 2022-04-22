@@ -1,4 +1,7 @@
+//This file contains all the pieces class and their functions.
+
 class Piece {
+  // Parent Piece class.
   constructor(color, type, pos = { x: 0, y: 0 }) {
     this.color = color;
     this.type = type;
@@ -6,6 +9,9 @@ class Piece {
     this.isFirstMove = true;
   }
 
+  // Function that moves the piece to a destined position and captures the enemy piece if needed (visually as well).
+  // pos = destined postion (this position is already a valid postion move).
+  // isVirtual = (true is not for a real move [check check]) (false is for an acsual move).
   moveTo(pos, isVirtual) {
     if (!isVirtual) {
       gameManager.changeTurn();
@@ -23,6 +29,8 @@ class Piece {
   }
 }
 
+// A sub-class of a Pawn piece
+// A sub-class of a Pawn piece
 class Pawn extends Piece {
   static TYPE = 'pawn';
   constructor(color, pos = { x: 0, y: 0 }) {
@@ -30,6 +38,8 @@ class Pawn extends Piece {
     this.isFirstMove = true;
   }
 
+  // Function that returns all the valid moves of the piece. (including special moves like En-Passant).
+  // no inputs, returns all the valid moves.
   validMoves() {
     let possibleMoves = [];
     const steps = this.isFirstMove ? 2 : 1;
@@ -68,6 +78,10 @@ class Pawn extends Piece {
     return possibleMoves;
   }
 
+  // Function that moves the piece to a destined position and captures the enemy piece if needed (visually as well).
+  // pos = destined postion (this position is already a valid postion move).
+  // isVirtual = (true is not for a real move [check check]) (false is for an acsual move).
+  // take into cosideration En Passant special capturing ability.
   moveTo(pos, isVirtual) {
     if (gameManager.enPassant && pos.x !== this.pos.x) {
       if (pos.y < this.pos.y) {
@@ -90,6 +104,7 @@ class Pawn extends Piece {
   }
 }
 
+// A sub-class of a Rook piece
 class Rook extends Piece {
   static TYPE = 'rook';
   constructor(color, pos = { x: 0, y: 0 }) {
@@ -97,6 +112,8 @@ class Rook extends Piece {
     this.isFirstMove = true;
   }
 
+  // Function that returns all the valid moves of the piece. (including special moves like En-Passant).
+  // no inputs, returns all the valid moves.
   validMoves() {
     let possibleMoves = [];
     const steps = boardData.boardSize - 1;
@@ -123,12 +140,15 @@ class Rook extends Piece {
   }
 }
 
+// A sub-class of a Knight piece
 class Knight extends Piece {
   static TYPE = 'knight';
   constructor(color, pos = { x: 0, y: 0 }) {
     super(color, Knight.TYPE, pos);
   }
 
+  // Function that returns all the valid moves of the piece.
+  // no inputs, returns all the valid moves.
   validMoves() {
     let possibleMoves = [];
     let offsets = [{ x: 1, y: 2 }, { x: 2, y: 1 }];
@@ -149,12 +169,15 @@ class Knight extends Piece {
   }
 }
 
+// A sub-class of a Bishop piece
 class Bishop extends Piece {
   static TYPE = 'bishop';
   constructor(color, pos = { x: 0, y: 0 }) {
     super(color, Bishop.TYPE, pos);
   }
 
+  // Function that returns all the valid moves of the piece.
+  // no inputs, returns all the valid moves.
   validMoves() {
     let possibleMoves = [];
     const steps = boardData.boardSize - 1;
@@ -181,12 +204,15 @@ class Bishop extends Piece {
   }
 }
 
+// A sub-class of a Queen piece
 class Queen extends Piece {
   static TYPE = 'queen';
   constructor(color, pos = { x: 0, y: 0 }) {
     super(color, Queen.TYPE, pos);
   }
 
+  // Function that returns all the valid moves of the piece.
+  // no inputs, returns all the valid moves.
   validMoves() {
     let possibleMoves = [];
     const steps = boardData.boardSize - 1;
@@ -214,12 +240,15 @@ class Queen extends Piece {
   }
 }
 
+// A sub-class of a King piece
 class King extends Piece {
   static TYPE = 'king';
   constructor(color, pos = { x: 0, y: 0 }) {
     super(color, 'king', pos);
   }
 
+  // Function that returns all the valid moves of the piece. (including special moves like Castling).
+  // no inputs, returns all the valid moves.
   validMoves() {
     let possibleMoves = [];
     let offsets = [{ x: 1, y: 0 }, { x: 1, y: 1 }];
@@ -255,6 +284,10 @@ class King extends Piece {
     return possibleMoves;
   }
 
+  // Function that moves the piece to a destined position and captures the enemy piece if needed (visually as well).
+  // pos = destined postion (this position is already a valid postion move).
+  // isVirtual = (true is not for a real move [check check]) (false is for an acsual move).
+  // take into cosideration Castling special movement. (Upon making a Castling move the Rook move's as well)
   moveTo(pos, isVirtual) {
     if (Math.abs(this.pos.x - pos.x) === 2) {
       if (isVirtual) {

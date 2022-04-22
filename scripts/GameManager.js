@@ -1,3 +1,4 @@
+// GameManager class, contains all the game variables and functions, the core of the game.
 class GameManager {
   constructor(boardData) {
     this.boardData = new BoardData(boardSize);
@@ -9,6 +10,7 @@ class GameManager {
     this.gameEnded = false;
   }
 
+  // The function that assigned to each <tr> element and actives everytime a player clicks a square.
   selectSquare(e) {
     if (this.gameEnded) {
       return;
@@ -51,6 +53,8 @@ class GameManager {
     }
   }
 
+  // A function which gets all the valid moves a piece can make and the piece object itself,
+  // and removes all the moves that will put their king in danger.
   removeCheckedSquares(validMoves, piece) {
     for (let i = 0; i < validMoves.length; i++) {
       let validMove = validMoves[i];
@@ -71,6 +75,8 @@ class GameManager {
     }
   }
 
+  // A function which activates whenever a Pawn piece get to the 8th rank and need to be premoted.
+  // Pops up the promotion-popup window.
   promotion(pos, color) {
     let popupWindow = document.getElementById((color === TeamColor.WHITE) ? 'w-popup' : 'b-popup' );
     this.popupArgs = {
@@ -80,6 +86,8 @@ class GameManager {
     popupWindow.style.visibility = 'visible';
   }
 
+  // A function which handles the choice of what to promote the pawn to.
+  // Hides the popup-window upon making a choice.
   promotionChoosen() {
     let type = $('input[name="promotion"]:checked');
     if (type) {
@@ -91,6 +99,7 @@ class GameManager {
     }
   }
 
+  // A function which called everytime that the turn should be switched, handles the turn-indicator as well.
   changeTurn() {
     let indicator = document.getElementById('turn-indicator');
     this.turn === TeamColor.WHITE ? indicator.classList.add('turn-indicator-b') : indicator.classList.remove('turn-indicator-b');
@@ -98,12 +107,15 @@ class GameManager {
     this.turn = this.turn === TeamColor.WHITE ? TeamColor.BLACK : TeamColor.WHITE;
   }
 
+  // A function which calls the checkForCheck function for both colors.
   checkForChecks() {
     this._checkForCheck(TeamColor.WHITE, true);
     this._checkForCheck(TeamColor.BLACK, true);
   }
 
-  _checkForCheck(color, toNotify) {
+  // A function which takes a TeamColor and checks wheather the team's pieces threat the other's team king (check),
+  // and notify the players accordingly (can be toggled on or off by the toNotify variable).
+  _checkForCheck(color, toNotify = true) {
     let possibleMoves = [];
     let pieces = color === TeamColor.WHITE ? boardData.wPieces : boardData.bPieces;
     for (let piece of pieces) {
@@ -130,6 +142,7 @@ class GameManager {
     return isCheck;
   }
 
+  // A function which takes a TeamColor and checks wheather the team's king is in checkmate.
   checkForCheckmate(color, wPossibleMoves) {
     let bPieces = color === TeamColor.WHITE ? boardData.bPieces : boardData.wPieces;
 
@@ -143,6 +156,7 @@ class GameManager {
     return noCheckMove.length === 0;
   }
 
+  // A function which takes a TeamColor and pops up a popup window with a massage that says that this team's king is in check.
   notifyCheck(color) {
     let notification = `The ${color} king is in check.`;
     let overlay = document.getElementsByClassName('popup-notification-overlay')[0];
@@ -158,6 +172,8 @@ class GameManager {
     }, 2000);
   }
 
+  // A function which takes a TeamColor and pops up a popup window with a massage that says that this team's king is in checkmate,
+  // and seals the game.
   notifyCheckmate(color) {
     this.gameEnded = true;
     let notification = `${color} wins!`;

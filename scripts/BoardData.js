@@ -1,9 +1,11 @@
+// BoardData class, cotntains all the data about the board itself and it's variables. Contains all the functions of the board.
 class BoardData {
   constructor(boardSize) {
     this.boardSize = boardSize;
     this.board = [];
   }
 
+  // A function which initialize the board and create all the needed HTML elements. By defaults - calls the resetBoard().
   createBoard() {
     // Defining table element
     let table = document.createElement('table');
@@ -62,11 +64,13 @@ class BoardData {
     this.resetBoard();
   }
 
+  // A function which reset the board to its initial phase. (For future).
   resetBoard() {
     // Reseting board
     this.initializePieces();
   }
 
+  // A function which initialize all the pieces in their correct place.
   initializePieces() {
     // Creating all the pieces
     this.wPieces = [];
@@ -86,6 +90,10 @@ class BoardData {
     }
   }
 
+  // A function which creates a piece and returns it if needed.
+  // type = type of piece, ex. Knight.TYPE.
+  // color = team color, ex. TeamColor.WHITE.
+  // pos = pos object { x: x, y: y }.
   createPiece(type, color, pos) {
     let piece;
     switch (type) {
@@ -114,6 +122,7 @@ class BoardData {
     return piece;
   }
 
+  // A function which takes a piece and draws it on the board.
   drawPiece(piece) {
     let imgPath = `./img/${piece.color}-${piece.type}.png`;
     let pieceImgElement = posToSqaure(piece.pos).getElementsByTagName('img')[0];
@@ -121,12 +130,14 @@ class BoardData {
     pieceImgElement.alt = '';
   }
 
+  // A function which takes a pos object { x: x, y: y } and clears it. (Without removing the piece from the pieces array).
   clearSquare(pos) {
     let pieceImgElement = posToSqaure(pos).getElementsByTagName('img')[0];
     this.board[pos.y][pos.x] = SquareState.EMPTY;
     pieceImgElement.src = '';
   }
 
+  // A function which takes a pos object { x: x, y: y } and captures it. (With removing the piece from the pieces array).
   captureSquare(pos) {
     let piece = this.board[pos.y][pos.x];
     if (piece) {
@@ -135,6 +146,7 @@ class BoardData {
     this.board[pos.y][pos.x] = SquareState.EMPTY;
   }
 
+  // A function which clear the board from everything (used for testing).
   clearBoard() {
     this.wPieces = [];
     this.bPieces = [];
@@ -146,6 +158,8 @@ class BoardData {
     }
   }
 
+  // A function which takes a pos object { x: x, y: y } and a TeamColor. and returns wheater this possition is State.OUT (Out of the board),
+  // State.EMPTY (Empty), State.FRIENDLY (Friendly), State.ENEMY (Enemy).
   getPosState(pos, color) {
     if (pos.x > boardData.boardSize - 1 || pos.x < 0 || pos.y > boardData.boardSize - 1 || pos.y < 0) {
       return SquareState.OUT;
@@ -154,6 +168,7 @@ class BoardData {
     return square !== SquareState.EMPTY ? square.color == color ? SquareState.FRIENDLY : SquareState.ENEMY : SquareState.EMPTY;
   }
 
+  // A function which rolls back the state of the board to when the given pieces were the current state.
   rollBack(wPieces, bPieces) {
     this.wPieces = [...wPieces];
     this.bPieces = [...bPieces];
