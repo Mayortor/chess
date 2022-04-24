@@ -27,9 +27,27 @@ class Piece {
       gameManager.checkForChecks();
     }
   }
+
+  // A function which takes a pos object { x: x, y: y }
+  // and returns where a piece can move in that direction.
+  validDirectionMoves(offset) {
+    let possibleMoves = [];
+    let checkPos = { ...this.pos };
+    for (let j = 0; j < boardData.boardSize - 1; j++) {
+      checkPos = addPos(checkPos, offset);
+      if (boardData.getPosState(checkPos, this.color) === SquareState.EMPTY) {
+        possibleMoves.push(posToSqaure(checkPos));
+      } else if (boardData.getPosState(checkPos, this.color) === SquareState.ENEMY) {
+        possibleMoves.push(posToSqaure(checkPos));
+        return possibleMoves;
+      } else {
+        return possibleMoves;
+      }
+    }
+    return possibleMoves;
+  }
 }
 
-// A sub-class of a Pawn piece
 // A sub-class of a Pawn piece
 class Pawn extends Piece {
   static TYPE = 'pawn';
@@ -120,20 +138,8 @@ class Rook extends Piece {
     let offset = { x: 1, y: 0 }
 
     for (let i = 0; i < 4; i++) {
-      let checkPos = {...this.pos};
+      possibleMoves = possibleMoves.concat(this.validDirectionMoves(offset));
       offset = rotatePos(offset, 90);
-
-      for (let j = 0; j < boardData.boardSize - 1; j++) {
-        checkPos = addPos(checkPos, offset);
-        if (boardData.getPosState(checkPos, this.color) === SquareState.EMPTY) {
-          possibleMoves.push(posToSqaure(checkPos));
-        } else if (boardData.getPosState(checkPos, this.color) === SquareState.ENEMY) {
-          possibleMoves.push(posToSqaure(checkPos));
-          break;
-        } else {
-          break;
-        }
-      }
     }
 
     return possibleMoves;
@@ -184,20 +190,8 @@ class Bishop extends Piece {
     let offset = { x: 1, y: 1 }
 
     for (let i = 0; i < 4; i++) {
-      let checkPos = {...this.pos};
+      possibleMoves = possibleMoves.concat(this.validDirectionMoves(offset));
       offset = rotatePos(offset, 90);
-
-      for (let j = 0; j < boardData.boardSize - 1; j++) {
-        checkPos = addPos(checkPos, offset);
-        if (boardData.getPosState(checkPos, this.color) === SquareState.EMPTY) {
-          possibleMoves.push(posToSqaure(checkPos));
-        } else if (boardData.getPosState(checkPos, this.color) === SquareState.ENEMY) {
-          possibleMoves.push(posToSqaure(checkPos));
-          break;
-        } else {
-          break;
-        }
-      }
     }
 
     return possibleMoves;
@@ -220,20 +214,8 @@ class Queen extends Piece {
 
     for (let k = 0; k < offsets.length; k++) {
       for (let i = 0; i < 4; i++) {
-        let checkPos = {...this.pos};
+        possibleMoves = possibleMoves.concat(this.validDirectionMoves(offsets[k]));
         offsets[k] = rotatePos(offsets[k], 90);
-
-        for (let j = 0; j < boardData.boardSize - 1; j++) {
-          checkPos = addPos(checkPos, offsets[k]);
-          if (boardData.getPosState(checkPos, this.color) === SquareState.EMPTY) {
-            possibleMoves.push(posToSqaure(checkPos));
-          } else if (boardData.getPosState(checkPos, this.color) === SquareState.ENEMY) {
-            possibleMoves.push(posToSqaure(checkPos));
-            break;
-          } else {
-            break;
-          }
-        }
       }
     }
     return possibleMoves;
