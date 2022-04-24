@@ -53,12 +53,12 @@ class Pawn extends Piece {
       }
     }
 
-    let offset = { x: 1, y: 1 };
-    for (let i = 0; i < 4; i++) {
+    let offset = this.color === TeamColor.WHITE ? { x: 1, y : -1 } : { x: -1, y: 1 };
+    for (let i = 0; i < 2; i++) {
       let checkPos = {...this.pos};
-      offset = rotatePos(offset, 90);
       checkPos = addPos(checkPos, offset);
       boardData.getPosState(checkPos, this.color) === SquareState.ENEMY ? possibleMoves.push(posToSqaure(checkPos)) : '';
+      offset = rotatePos(offset, 90);
     }
 
     if (gameManager.enPassant) {
