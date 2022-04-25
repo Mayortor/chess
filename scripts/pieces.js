@@ -52,7 +52,7 @@ class Pawn extends Piece {
   static TYPE = 'pawn';
   constructor(color, pos = { x: 0, y: 0 }) {
     super(color, Pawn.TYPE, pos);
-    this.isFirstMove = true;
+    this.isFirstMove = pos.y === 1 && color === TeamColor.BLACK || pos.y === 6 && color === TeamColor.WHITE ? true : false;
   }
 
   // Function that returns all the valid moves of the piece. (including special moves like En-Passant).
@@ -126,7 +126,7 @@ class Rook extends Piece {
   static TYPE = 'rook';
   constructor(color, pos = { x: 0, y: 0 }) {
     super(color, Rook.TYPE, pos);
-    this.isFirstMove = true;
+    this.isFirstMove = false;
   }
 
   // Function that returns all the valid moves of the piece. (including special moves like En-Passant).

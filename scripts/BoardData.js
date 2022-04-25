@@ -71,8 +71,8 @@ class BoardData {
   }
 
   // A function which initialize all the pieces in their correct place.
-  // Supports fen notations
-  initializePieces(fenNotation = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR') {
+  // Supports fen notations.
+  initializePieces(fenNotation = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1') {
 
     // Creating all the pieces
     this.wPieces = [];
@@ -86,9 +86,11 @@ class BoardData {
       }
     }
 
+    fenNotation = fenNotation.split(' ');
+
 
     let pointer = { x: 0, y: 0 };
-    for (const n of fenNotation) {
+    for (const n of fenNotation[0]) {
       if (Number.isInteger(Number(n))) {
         pointer.x += Number(n);
       } else if (n === '/') {
@@ -122,11 +124,21 @@ class BoardData {
       }
     }
 
+    if (gameManager.turn === TeamColor.WHITE) {
+      fenNotation[1] === 'b' ? gameManager.changeTurn() : '';
+    } else {
+      fenNotation[1] === 'w' ? gameManager.changeTurn() : '';
+    }
 
-    // for (let i = 0; i < piecesPosition.length; i++) {
-    //   this.createPiece(piecesPosition[i].type, TeamColor.BLACK, piecesPosition[i].pos);
-    //   this.createPiece(piecesPosition[i].type, TeamColor.WHITE, mirrorPosVertically(piecesPosition[i].pos));
-    // }
+    if (fenNotation[2] !== '-') {
+      fenNotation[2].indexOf('K') !== -1 ? this.board[7][7].isFirstMove = true : '';
+      fenNotation[2].indexOf('Q') !== -1 ? this.board[0][7].isFirstMove = true : '';
+      fenNotation[2].indexOf('k') !== -1 ? this.board[7][0].isFirstMove = true : '';
+      fenNotation[2].indexOf('q') !== -1 ? this.board[0][0].isFirstMove = true : '';
+    }
+    if (fenNotation[3] !== '-') {
+      gameManager.enPassant = this.board[Number(fenNotation[3][0])][Number(fenNotation[3][1])];
+    }
   }
 
   // A function which creates a piece and returns it if needed.
@@ -227,4 +239,5 @@ class BoardData {
       this.drawPiece(piece);
     }
   }
+
 }
