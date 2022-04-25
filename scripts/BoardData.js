@@ -71,7 +71,9 @@ class BoardData {
   }
 
   // A function which initialize all the pieces in their correct place.
-  initializePieces() {
+  // Supports fen notations
+  initializePieces(fenNotation = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR') {
+
     // Creating all the pieces
     this.wPieces = [];
     this.bPieces = [];
@@ -84,10 +86,47 @@ class BoardData {
       }
     }
 
-    for (let i = 0; i < piecesPosition.length; i++) {
-      this.createPiece(piecesPosition[i].type, TeamColor.BLACK, piecesPosition[i].pos);
-      this.createPiece(piecesPosition[i].type, TeamColor.WHITE, mirrorPosVertically(piecesPosition[i].pos));
+
+    let pointer = { x: 0, y: 0 };
+    for (const n of fenNotation) {
+      if (Number.isInteger(Number(n))) {
+        pointer.x += Number(n);
+      } else if (n === '/') {
+        pointer.x = 0;
+        pointer.y++;
+      } else {
+        const color = n === n.toUpperCase() ? TeamColor.WHITE : TeamColor.BLACK;
+        let type;
+        switch (n.toLowerCase()) {
+          case 'p':
+            type = Pawn.TYPE;
+            break;
+          case 'r':
+            type = Rook.TYPE;
+            break;
+          case 'n':
+            type = Knight.TYPE;
+            break;
+          case 'b':
+            type = Bishop.TYPE;
+            break;
+          case 'q':
+            type = Queen.TYPE;
+            break;
+          case 'k':
+            type = King.TYPE;
+            break;
+        }
+        this.createPiece(type, color, {...pointer});
+        pointer.x++;
+      }
     }
+
+
+    // for (let i = 0; i < piecesPosition.length; i++) {
+    //   this.createPiece(piecesPosition[i].type, TeamColor.BLACK, piecesPosition[i].pos);
+    //   this.createPiece(piecesPosition[i].type, TeamColor.WHITE, mirrorPosVertically(piecesPosition[i].pos));
+    // }
   }
 
   // A function which creates a piece and returns it if needed.

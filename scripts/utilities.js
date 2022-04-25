@@ -68,6 +68,6 @@ function getKing(color) {
 }
 
 // Function that gets a color TeamColor value and returns the oppisite TeamColor (WHITE -> BLACK and vice-versa).
-function flipColor(color) {
+function opponentColor(color) {
   return color === TeamColor.WHITE ? TeamColor.BLACK : TeamColor.WHITE;
 }

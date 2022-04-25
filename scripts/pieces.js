@@ -1,5 +1,4 @@
-//This file contains all the pieces class and their functions.
-
+// This file contains all the pieces class and their functions.
 class Piece {
   // Parent Piece class.
   constructor(color, type, pos = { x: 0, y: 0 }) {

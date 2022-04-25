@@ -64,7 +64,7 @@ class GameManager {
       let prevPos = {...piece.pos};
       let validMovePos = squareToPos(validMove);
       piece.moveTo(validMovePos, true);
-      if (gameManager._checkForCheck(flipColor(piece.color), false)) {
+      if (gameManager._checkForCheck(opponentColor(piece.color), false)) {
         validMoves.splice(validMoves.indexOf(validMove), 1);
         i--;
       }
@@ -122,7 +122,7 @@ class GameManager {
       possibleMoves = possibleMoves.concat(piece.validMoves());
     }
     possibleMoves = [...new Set(possibleMoves)];
-    let king = getKing(flipColor(color));
+    let king = getKing(opponentColor(color));
 
     let isCheck = false;
 

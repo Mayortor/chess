@@ -1,4 +1,3 @@
-
 // Defining board size;
 const boardSize = 8;
 
